@@ -9,19 +9,23 @@ public class SaveBurger : MonoBehaviour
     public TMP_InputField burgerNameField;
     public TMP_InputField authorNameField;
     public Button saveButton;
+    public apiHandler apiHandler;
     private Burger burger;
-    private apiHandler apiHandler;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        apiHandler = FindObjectOfType<apiHandler>();
+        // If not assigned in Inspector, try to find it
+        if (apiHandler == null)
+        {
+            apiHandler = FindAnyObjectByType<apiHandler>();
+        }
     }
 
     public void OnSaveButtonClicked()
     {
         // Find the burger from the test script
-        test testScript = FindObjectOfType<test>();
+        test testScript = FindAnyObjectByType<test>();
         if (testScript != null)
         {
             burger = testScript.burger;

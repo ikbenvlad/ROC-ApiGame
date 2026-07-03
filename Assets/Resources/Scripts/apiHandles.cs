@@ -36,6 +36,36 @@ public class apiHandler : MonoBehaviour
         }
     }
 
+    public IEnumerator ReqGetBurgers()
+    {
+        using (UnityWebRequest request = UnityWebRequest.Post(home, "{ \"request\":\"list\"}", "application/json"))
+        {
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Burgers: " + request.downloadHandler.text);
+                // Parse the JSON array and populate your burger list UI
+            }
+        }
+    }
+
+    public IEnumerator ReqDownloadBurger(int burgerId)
+    {
+        string downloadUrl = home.Replace("api.php", "burger_download.php?id=" + burgerId);
+
+        using (UnityWebRequest request = UnityWebRequest.Get(downloadUrl))
+        {
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string burgerJson = request.downloadHandler.text;
+                // Parse burgerJson and recreate the burger in-game
+                SaveBurger.BurgerData burgerData = JsonUtility.FromJson<SaveBurger.BurgerData>(burgerJson);
+                Debug.Log("Downloaded: " + burgerData.burgerName);
+            }
+        }
+    }
+
     private IEnumerator ReqAnswer()
     {
         using (UnityWebRequest request = UnityWebRequest.Post(home, "{ \"request\":\"bericht\"}", "application/json"))
@@ -80,5 +110,6 @@ public class apiHandler : MonoBehaviour
             }
         }
     }
+
 
 }

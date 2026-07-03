@@ -43,8 +43,16 @@ public class LoadBurger : MonoBehaviour
         // Sort by most recent first
         jsonFiles = jsonFiles.OrderByDescending(f => File.GetLastWriteTime(f)).ToArray();
 
-        // Load the most recent burger automatically
-        Debug.Log($"Loading most recent burger: {Path.GetFileName(jsonFiles[0])}");
+        // Display file names and let player choose
+        Debug.Log("Available burger files:");
+        for (int i = 0; i < jsonFiles.Length; i++)
+        {
+            Debug.Log($"{i}: {Path.GetFileNameWithoutExtension(jsonFiles[i])}");
+        }
+
+        // For now, load the first one, but you should add UI buttons for selection
+        // TODO: Create UI buttons to let player click and select
+        Debug.Log($"Loading: {Path.GetFileName(jsonFiles[0])}");
         PerformLoadBurger(jsonFiles[0]);
     }
 
