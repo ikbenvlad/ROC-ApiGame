@@ -10,11 +10,12 @@ public class SaveBurger : MonoBehaviour
     public TMP_InputField authorNameField;
     public Button saveButton;
     private Burger burger;
+    private apiHandler apiHandler;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        apiHandler = FindObjectOfType<apiHandler>();
     }
 
     public void OnSaveButtonClicked()
@@ -80,22 +81,35 @@ public class SaveBurger : MonoBehaviour
             ingredients = ingredientDataList
         };
 
-        // String that grabs the user's downloads folder
-        string downloadsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile);
-        downloadsPath = Path.Combine(downloadsPath, "Downloads");
-
         // Create the JSON string
         string json = JsonUtility.ToJson(burgerdata, true);
 
-        // Create the filename with the burger name and author name
+        // Send to database
+        if (apiHandler != null)
+        {
+            apiHandler.SaveBurgerToDatabase(json);
+        }
+        else
+        {
+            Debug.LogError("apiHandler not found in scene!");
+        }
+
+        // Optionally: also save locally to Downloads
+        SaveLocalCopy(burgerdata, json);
+    }
+
+    private void SaveLocalCopy(BurgerData burgerdata, string json)
+    {
+        string downloadsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile);
+        downloadsPath = Path.Combine(downloadsPath, "Downloads");
+
         string filename = $"{burgerdata.burgerName}_" + System.DateTime.Now.ToString("dd-MM-HH-mm") + ".json";
         string filepath = Path.Combine(downloadsPath, filename);
 
-        // Save the file
         File.WriteAllText(filepath, json);
 
-        Debug.Log($"Burger data saved to: {filepath}");
-        Debug.Log($"Ingredients saved: {ingredientDataList.Count}");
+        Debug.Log($"Burger data saved locally to: {filepath}");
+        Debug.Log($"Ingredients saved: {burgerdata.ingredients.Count}");
     }
 
     [System.Serializable]
