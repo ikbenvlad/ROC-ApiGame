@@ -11,46 +11,7 @@ public class test : MonoBehaviour
     {
         burger = new Burger();
 
-        // Check if there's a saved burger to load
-        BurgerDataHolder burgerHolder = FindAnyObjectByType<BurgerDataHolder>();
-        if (burgerHolder != null)
-        {
-            SaveBurger.BurgerData burgerData = burgerHolder.GetBurgerData();
-            if (burgerData != null && burgerData.ingredients != null && burgerData.ingredients.Count > 0)
-            {
-                LoadBurgerFromData(burgerData);
-                burgerHolder.ClearBurgerData();
-                return;
-            }
-        }
-
         burger.LogIngredients();
-    }
-
-    private void LoadBurgerFromData(SaveBurger.BurgerData burgerData)
-    {
-        Debug.Log($"Loading burger: {burgerData.burgerName} by {burgerData.authorName}");
-        
-        foreach (var ingredientData in burgerData.ingredients)
-        {
-            // Get the ingredient prefab by name
-            Ingredient ingredientPrefab = Resources.Load<Ingredient>($"Ingredients/{ingredientData.ingredientName}");
-            
-            if (ingredientPrefab != null)
-            {
-                Vector3 position = new Vector3(ingredientData.positionX, ingredientData.positionY, ingredientData.positionZ);
-                Ingredient spawnedIngredient = Instantiate(ingredientPrefab, position, Quaternion.identity);
-                spawnedIngredient.transform.parent = transform;
-                burger.AddIngredient(spawnedIngredient);
-                Debug.Log($"Loaded ingredient: {ingredientData.ingredientName}");
-            }
-            else
-            {
-                Debug.LogWarning($"Ingredient prefab not found: {ingredientData.ingredientName}");
-            }
-        }
-
-        Debug.Log($"Burger loaded with {burger.burgerIngredients.Count} ingredients");
     }
 
     public void burgerBuilder(Ingredient ingredientToAdd) 

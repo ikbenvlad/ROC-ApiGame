@@ -9,8 +9,9 @@ public class MenuButtons : MonoBehaviour
         SceneManager.LoadScene("Create");
     }
 
-    public void ImportBurger()
+    public void ViewBurgers()
     {
-        
+        Application.OpenURL("http://localhost/burgers.php");
     }
+
 }
