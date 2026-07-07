@@ -25,6 +25,7 @@ public class test : MonoBehaviour
 
     public void undoLast()
     {
+        Debug.Log(burger.burgerIngredients.Count);
         if (burger.burgerIngredients.Count > 0)
         {
             Ingredient lastIngredient = burger.burgerIngredients[burger.burgerIngredients.Count - 1];

@@ -1,12 +1,8 @@
-
-
-
 using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-[Serializable]
 public class Burger
 {
     public string burgerName;
@@ -32,7 +28,8 @@ public class Burger
     public void AddIngredient(Ingredient ingredient)
     {
         burgerIngredients.Add(ingredient);
-        Debug.Log(this.ToJson());
+        Debug.Log("Added ingredient: " + ingredient.name + "." + " Burger count is now " + burgerIngredients.Count);
+        //Debug.Log(this.ToJson());
     }
 
     public void DebugBurger()
